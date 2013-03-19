@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.masterblaster.js"></script>
+    <link rel="stylesheet" type="text/css" href="jquery.masterblaster.css">
+  </head>
+  <body>
+    <input id="tags" placeholder="Enter tags here"/>
+    <script type="text/javascript">
+      $( "#tags" ).masterblaster( {
+        animate: false,
+        triggerKeys: [ 9, 13 ],
+        onInvalid: function( tagName, errorMessage ) {
+          console.info( tagName, errorMessage );
+        } 
+      } );
+    </script> 
+  </body>
+</html>
