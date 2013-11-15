@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Jquery.masterblaster by aef-</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Jquery.masterblaster</h1>
+          <h2>Simple tag management.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/aef-/jquery.masterblaster/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/aef-/jquery.masterblaster/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/aef-/jquery.masterblaster" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>Tested with: <a href="http://jquery.com">jQuery 1.9.1</a></p>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<hr><h4>
+<a name="animate" class="anchor" href="#animate"><span class="octicon octicon-link"></span></a>animate</h4>
+
+<p>Animate the addition or removal of a tag.</p>
+
+<h6>
+<a name="default" class="anchor" href="#default"><span class="octicon octicon-link"></span></a>Default</h6>
+
+<p>true</p>
+
+<hr><h4>
+<a name="triggerkeys" class="anchor" href="#triggerkeys"><span class="octicon octicon-link"></span></a>triggerKeys</h4>
+
+<p>Hotkeys user may use to enter a tag.</p>
+
+<h6>
+<a name="default-1" class="anchor" href="#default-1"><span class="octicon octicon-link"></span></a>Default</h6>
+
+<p>[ 9, 13 ] //tab and enter</p>
+
+<hr><h4>
+<a name="showaddbutton" class="anchor" href="#showaddbutton"><span class="octicon octicon-link"></span></a>showAddButton</h4>
+
+<h5>
+<a name="default-2" class="anchor" href="#default-2"><span class="octicon octicon-link"></span></a>Default</h5>
+
+<p>true</p>
+
+<hr><h4>
+<a name="helptext" class="anchor" href="#helptext"><span class="octicon octicon-link"></span></a>helpText</h4>
+
+<h6>
+<a name="default-3" class="anchor" href="#default-3"><span class="octicon octicon-link"></span></a>Default</h6>
+
+<p>"Hit Tab or Enter to add"</p>
+
+<hr><h4>
+<a name="tagrules" class="anchor" href="#tagrules"><span class="octicon octicon-link"></span></a>tagRules</h4>
+
+<h5>
+<a name="unique" class="anchor" href="#unique"><span class="octicon octicon-link"></span></a>unique</h5>
+
+<p>Tags must be unique to be added.</p>
+
+<h6>
+<a name="default-4" class="anchor" href="#default-4"><span class="octicon octicon-link"></span></a>Default</h6>
+
+<p>false</p>
+
+<h5>
+<a name="minlength" class="anchor" href="#minlength"><span class="octicon octicon-link"></span></a>minLength</h5>
+
+<p>Minimum character length a tag must be.</p>
+
+<h6>
+<a name="default-5" class="anchor" href="#default-5"><span class="octicon octicon-link"></span></a>Default</h6>
+
+<p>null</p>
+
+<hr><h2>
+<a name="events" class="anchor" href="#events"><span class="octicon octicon-link"></span></a>Events</h2>
+
+<h4>
+<a name="mbadd" class="anchor" href="#mbadd"><span class="octicon octicon-link"></span></a>mb:add</h4>
+
+<p>Occurs on addition of tag through any means (user insert or programmatically through the api).</p>
+
+<p>{% highlight javascript %}
+var $mb = $( ".masterblaster-1" );
+$mb.masterblaster( );
+$mb.push( "tag 1" );
+$mb.on( "mb:add", function( e, tagName ) {
+    console.info( tagName );
+} );
+{% endhighlight %}</p>
+
+<h4>
+<a name="mbremove" class="anchor" href="#mbremove"><span class="octicon octicon-link"></span></a>mb:remove</h4>
+
+<p>Occurs on removal of tag through any means (user insert or programmatically through the api). If multiple tags of the same name are added and are removed using <em>remove</em> api the event will still be called only once.</p>
+
+<p>{% highlight javascript %}
+var $mb = $( ".masterblaster-1" );
+$mb.masterblaster( );
+$mb.push( "tag 1" );
+$mb.remove( "tag 1" ); //or $mb.pop( );
+$mb.on( "mb:remove", function( e, tagName ) {
+    console.info( tagName );
+} );
+{% endhighlight %}</p>
+
+<h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<h4>
+<a name="pushtagname" class="anchor" href="#pushtagname"><span class="octicon octicon-link"></span></a>push(tagName)</h4>
+
+<p>Add tagName to the end of the list.</p>
+
+<h4>
+<a name="pop-" class="anchor" href="#pop-"><span class="octicon octicon-link"></span></a>pop( )</h4>
+
+<p>Removes last tag.</p>
+
+<h4>
+<a name="removetagname" class="anchor" href="#removetagname"><span class="octicon octicon-link"></span></a>remove(tagName)</h4>
+
+<p>This will remove <em>all</em> tags tagName.</p>
+
+<h4>
+<a name="destroy" class="anchor" href="#destroy"><span class="octicon octicon-link"></span></a>destroy()</h4>
+
+<p>Destroy/cleanup instance of plugin.</p>
+
+<h2>
+<a name="tests" class="anchor" href="#tests"><span class="octicon octicon-link"></span></a>Tests</h2>
+
+<p>For tests, go <strong><a href="/jquery.masterblaster/tests">here</a></strong>.</p>
+        </section>
+
+        <footer>
+          Jquery.masterblaster is maintained by <a href="https://github.com/aef-">aef-</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
