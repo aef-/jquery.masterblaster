@@ -1,4 +1,4 @@
-.b-container {
+.mb-container {
   overflow: hidden;
 }
 .mb-container ul.mb-taglist {
@@ -10,6 +10,7 @@
 .mb-meta {
   float: left;
   overflow: hidden;
+  padding-left: 5px;
 }
 .mb-tag-content {
   overflow: hidden;
@@ -21,6 +22,7 @@
 }
 .mb-container.mb-error .mb-input {
   border: 1px solid red;
+  outline: red;
 }
 
 .mb-add-button {
@@ -51,7 +53,7 @@
   font-family: arial, serif;
   float: left;
   list-style-type: none;
-  padding: 6px;
+  padding: 4px;
   margin-right: 4px;
   background: #f0f0f0;
   border: 1px solid #c0c0c0;
