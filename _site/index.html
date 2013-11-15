@@ -50,8 +50,8 @@
     <span class="nx">minLength</span><span class="o">:</span> <span class="mi">3</span>
   <span class="p">}</span>
 <span class="p">}</span> <span class="p">);</span>
-<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span>
-<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 2&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">masterblaster</span><span class="p">(</span> <span class="s2">&quot;push&quot;</span><span class="p">,</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">masterblaster</span><span class="p">(</span> <span class="s2">&quot;push&quot;</span><span class="p">,</span> <span class="s2">&quot;tag 2&quot;</span> <span class="p">);</span>
 <span class="nx">$mb</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;mb:add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">tagName</span> <span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span> <span class="s2">&quot;Added: tagName&quot;</span> <span class="p">);</span>
 <span class="p">}</span> <span class="p">);</span>  
@@ -68,8 +68,8 @@ $mb.masterblaster( {
     minLength: 3
   }
 } );
-$mb.push( "tag 1" );
-$mb.push( "tag 2" );
+$mb.masterblaster( "push", "tag 1" );
+$mb.masterblaster( "push", "tag 2" );
 $mb.on( "mb:add", function( e, tagName ) {
     console.info( "Added: tagName" );
 } );  

@@ -17,8 +17,8 @@ $mb.masterblaster( {
     minLength: 3
   }
 } );
-$mb.push( "tag 1" );
-$mb.push( "tag 2" );
+$mb.masterblaster( "push", "tag 1" );
+$mb.masterblaster( "push", "tag 2" );
 $mb.on( "mb:add", function( e, tagName ) {
     console.info( "Added: tagName" );
 } );  
@@ -35,8 +35,8 @@ $mb.masterblaster( {
     minLength: 3
   }
 } );
-$mb.push( "tag 1" );
-$mb.push( "tag 2" );
+$mb.masterblaster( "push", "tag 1" );
+$mb.masterblaster( "push", "tag 2" );
 $mb.on( "mb:add", function( e, tagName ) {
     console.info( "Added: tagName" );
 } );  
