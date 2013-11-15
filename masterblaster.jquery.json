@@ -15,7 +15,7 @@
     "jquery": ">=1.9.1"
   },
   "description": "A nice and tidy tag manager.",
-  "keywords": [ "tag", "tag manager", "tagger", "tags", "form", "input", "tagging" ],
+  "keywords": [ "tag", "tagmanager", "tagger", "tags", "form", "input", "tagging" ],
   "homepage": "https://github.com/aef-/jquery.masterblaster",
   "docs": "http://aef-.github.io/jquery.masterblaster",
   "demo": "http://aef-.github.io/jquery.masterblaster"
