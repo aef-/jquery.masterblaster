@@ -1,4 +1,4 @@
-/* jquery.masterblaster v.0.0.1
+/* jquery.masterblaster v.0.0.2
  * A nice and tidy tag manager.
  * by aef
  */
