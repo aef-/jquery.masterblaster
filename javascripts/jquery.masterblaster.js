@@ -1,44 +1,45 @@
-/* jquery.masterblaster v.1
- * simple tag management
+/* jquery.masterblaster v.0.0.1
+ * A nice and tidy tag manager.
  * by aef
  */
 ( function( $, window, document, undefined ) {
   var pluginName = "masterblaster",
+      name = "plugin_masterblaster",
       defaults = { 
         animate: true,
-        onRemove: null,
-        onAdd: null,
-        onInvalid: null, //tagName, error message
-        triggerKeys: [ 9 ], //keycode when entered adds the tag
+        triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
+        showAddButton: true,
+        helpText: "Hit Tab or Enter to add",
         tagRules: {
-          unique: true,
-          minLength: 3
+          unique: false,
+          minLength: null
         }
       },
-      methods = [ "push", "pop", "remove" ];
+      methods = [ "push", "pop", "remove", "destroy" ];
 
   function MasterBlaster( $element, options ) {
-    this.options = $.extend( defaults, options );
+    this.options = $.extend( {}, defaults, options );
     this.$container = $( '<div class="mb-container"></div>' );
     this.$tagList = $( '<ul class="mb-taglist"></ul>' );
+    this.$meta = $( '<div class="mb-meta"></div>' );
+    this.$element = $element;
     this.$oldInput = $element;
     this.$input = $element.clone( );
-    this.tag = [ '<li style="opacity:1" data-tag="" class="mb-tag">',
+    if( this.options.showAddButton )
+      this.$addButton = $( "<button class='btn mb-add-button'><i class='icon-plus'></i>Add</button>" );
+    this.tag = [ '<li style="opacity:1" data-tag="" class="mb-tag"><div class="mb-tag-content">',
                   '<span class="mb-tag-text"></span>',
-                  '<a href="javascript:void( );return;" class="mb-tag-remove"></a>',
-                 '</li>' ].join( "" );
-    //tagName => elem 
-    this.elemCache = { };
+                  '<a class="mb-tag-remove"></a>',
+                 '</div></li>' ].join( "" );
     this.tags = [ ];
 
     this.setup( );
-    this.inputEvents( );
   }
 
   MasterBlaster.prototype.addElem = function( $tag ) {
     if( this.options.animate ) {
       $tag.css( "opacity", 0 );
-      $tag.insertBefore( this.$input );
+      $tag.insertBefore( this.$meta );
       var width = $tag.css( "width" );
       $tag.css( "width", 0 );
       $tag.animate( {
@@ -48,9 +49,8 @@
        $tag.animate( { opacity: 1 } ); 
       } );
     }
-    else {
-      $tag.insertBefore( this.$input );
-    }
+    else
+      $tag.insertBefore( this.$meta );
   };
 
   MasterBlaster.prototype.buildTag = function( tagName ) {
@@ -61,30 +61,40 @@
     return $tag;
   };
 
-  MasterBlaster.prototype.inputEvents = function( ) {
-    var _this = this;
-    this.$input.on( "keydown", function( e ) {
-      if( ~_this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
-        e.preventDefault(); 
-        var $this = $( this );
-        var tagName = _this.cleanTag( $this.val( ) );
-        if( _this.isValid( tagName ) ) {
-          _this.push( tagName );
-        } 
-        else if( typeof _this.options.onInvalid === "function" ) {
-          _this.options.onInvalid( tagName, _this.error );
-        }
-        $this.val( "" );
-      }
-    } );
+  MasterBlaster.prototype.removeEvents = function( ) {
+    this.$input.on( "keydown", $.proxy( this.onRemove, this ) );
+    if( this.options.showAddButton )
+      this.$addButton.on( "click", $.proxy( this.onRemove, this ) );
   };
 
+  MasterBlaster.prototype.addEvents = function( ) {
+    this.$input.on( "keydown", $.proxy( this.onAdd, this ) );
+    if( this.options.showAddButton )
+      this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
+  };
+  
+  MasterBlaster.prototype.onAdd = function( e ) {
+    if( e.type === "click" || ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
+      e.preventDefault(); 
+      var tagName = this.cleanTag( this.$input.val( ) );
+      if( this.isValid( tagName ) ) {
+        this.$container.removeClass( "mb-error" );
+        this.push( tagName );
+        this.$input.val( "" );
+      }
+      else {
+        this.$container.addClass( "mb-error" );
+        this.$element.trigger( "mb:error", tagName, this.error );
+      }
+    }
+  };                                                             
+ 
   MasterBlaster.prototype.cleanTag = function( tagName ) {
     return tagName;
   };
 
   MasterBlaster.prototype.isValid = function( tagName ) {
-    if( this.options.tagRules.unique && this.has( tagName ) ) {
+    if( this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
       return false;
     }
@@ -98,16 +108,17 @@
   };
 
   MasterBlaster.prototype.refreshTagEvents = function( ) {
-    var _this = this;
     this.$tagList.find( ".mb-tag-remove" ).off( "click" );
-    this.$tagList.find( ".mb-tag-remove" ).on( "click", function( e ) {
-      e.preventDefault( );
-      _this.remove( $( this ).parent( ).attr( "data-tag" ) );
-    } );
+    this.$tagList.find( ".mb-tag-remove" ).on( "click", $.proxy( this.onRemove, this ) );
   };
 
-  MasterBlaster.prototype.removeElem = function( $tag ) {
-    this.remove( $( this ).siblings( ".mb-tag-text" ).text( ) );
+  MasterBlaster.prototype.onRemove = function( e ) {
+    e.preventDefault( );
+    this.remove( $( e.target ).parents( ".mb-tag" ).attr( "data-tag" ) );
+  };
+ 
+  MasterBlaster.prototype.removeElem = function( tagName ) {
+    var $tag = this.$tagList.find( "[data-tag='"+tagName+"']" );
     if( this.options.animate ) {
       $tag.animate( { opacity: 0.01 }, "fast", function( ) {
         $tag.animate( { width: 0, margin: 0 }, "fast", function( ) {
@@ -119,19 +130,18 @@
       $tag.remove( ); 
   };
 
-  MasterBlaster.prototype.has = function( tagName ) {
+  MasterBlaster.prototype.hasTag = function( tagName ) {
     return ~( this.tags.indexOf( tagName ) ); 
   };
 
   MasterBlaster.prototype.push = function( tagName ) {
     this.tags.push( tagName );
-    this.elemCache[ tagName ] = this.buildTag( tagName );
+    ;
 
-    this.addElem( this.elemCache[ tagName ] );
+    this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
 
-    if( typeof this.options.onAdd === "function" )
-      this.options.onAdd( tagName );
+    this.$element.trigger( "mb:add", tagName );
   };
 
   MasterBlaster.prototype.pop = function( ) {
@@ -139,43 +149,55 @@
     this.remove( tagName );
   };
 
-  MasterBlaster.prototype.remove = function( tagName ) {
+  MasterBlaster.prototype.removeFromTagsArray = function( tagName ) {
     var index = this.tags.indexOf( tagName );
-    if( !~index ) return;
-    var $tag = this.elemCache[ tagName ];
-
-    this.removeElem( $tag );
-
+    if( !~index ) return false;
     this.tags.splice( index, 1 );
-    delete this.elemCache[ tagName ];
+    return true;
+  };
 
-    if( typeof this.options.onRemove === "function" )
-      this.options.onRemove( tagName );
+  MasterBlaster.prototype.remove = function( tagName ) {
+    this.removeElem( tagName );
+    while( this.removeFromTagsArray( tagName ) );
+    this.$element.trigger( "mb:remove", tagName );
+  };
+
+  MasterBlaster.prototype.destroy = function( ) {
+    this.$oldInput.show( );
+    this.removeEvents( );
+    this.$container.remove( );
+    this.$element.removeData( name );
   };
 
   MasterBlaster.prototype.setup = function( ) {
     this.$container.insertAfter( this.$oldInput );
     this.$oldInput.hide( );
     this.$input.attr( "id", "" ).addClass( "mb-input" );
-    this.$container.append( this.$tagList.append( this.$input ) );
+    this.$container.append( this.$tagList.append( this.$meta ) );
+    this.$meta.append( this.$input );
+    if( this.options.showAddButton )
+      this.$input.after( this.$addButton );
+    if( this.options.helpText )
+      this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
+
+    this.addEvents( );
   };
- 
+  
   $.fn[ pluginName ] = function( optionsOrMethod ) {
-    var _$this = this;
-    var masterblaster = null;
-    var _arguments = Array.prototype.slice.call( arguments );
-    //Initialize a new version of the plugin
+    var $this,
+        _arguments = Array.prototype.slice.call( arguments ),
+        optionsOrMethod = optionsOrMethod || { };
+
     return this.each(function ( ) {
-      if( !$.data( this, "plugin_" + pluginName ) ) {
-        $.data( this, "plugin_" + pluginName, new MasterBlaster( $( this ), optionsOrMethod ) );
-      }
-      else {
-        if( ~$.inArray( optionsOrMethod, methods ) ) {
-          $.data( this, "plugin_" + pluginName )[ optionsOrMethod ].apply( $.data( this, "plugin_" + pluginName ), _arguments.splice( 1, _arguments.length ) );
-        }
+      $this = $( this );
+      if( !$this.data( name ) && ( typeof optionsOrMethod ).toLowerCase( ) === "object" ) 
+        $this.data( name, new MasterBlaster( $this, optionsOrMethod ) );
+      else if( ( typeof optionsOrMethod ).toLowerCase( ) === "string" ) {
+        if( ~$.inArray( optionsOrMethod, methods ) )
+          $this.data( name )[ optionsOrMethod ].apply( $this.data( name ), _arguments.slice( 1, _arguments.length ) );
         else
-          console.error( "Method", optionsOrMethod, "does not exist. Did you instantiate masterblaster." );
+          throw new Error( "Method " + optionsOrMethod + " does not exist. Did you instantiate masterblaster?" );
       }
     } );
-  };
+  }; 
 } )( jQuery, window, document );

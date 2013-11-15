@@ -7,11 +7,53 @@
   overflow: hidden;
   float: left;
 }
+.mb-meta {
+  float: left;
+  overflow: hidden;
+  padding-left: 5px;
+}
+.mb-tag-content {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mb-help-text {
+  margin-left: 5px;
+  font-family: sans-serif;
+}
+.mb-container.mb-error .mb-input {
+  border: 1px solid red;
+  outline: red;
+}
+
+.mb-add-button {
+  padding: 4px 8px;
+  margin-left: 5px;
+  font-size: 14px;
+  line-height: 20px; 
+  border-radius: 4px;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #0044cc;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); 
+}
 .mb-container li.mb-tag {
+  overflow: hidden;
   font-family: arial, serif;
   float: left;
   list-style-type: none;
-  padding: 4px 6px;
+  padding: 4px;
   margin-right: 4px;
   background: #f0f0f0;
   border: 1px solid #c0c0c0;
@@ -23,18 +65,19 @@
 .mb-container .mb-input-container {
   float: right;
 }
-.mb-container input.mb-input {
+.mb-container .mb-input {
   float: left;
   border: 1px solid #c0c0c0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px; 
-  padding: 4px 6px;
+  padding: 6px;
   font-size: 1em;
-  margin: 0;
+  margin: 2px 0 0 0;
 }
 
 .mb-container a.mb-tag-remove {
+  cursor: pointer;
   text-decoration: none;
   display: inline-block;
   margin-left: 5px;

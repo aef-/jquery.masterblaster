@@ -1,46 +1,201 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>jQuery.masterblaster by aef-</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <link rel="stylesheet" href="stylesheets/jquery.masterblaster.css">
-    <script src="javascripts/jquery.js"></script>
-    <script src="javascripts/jquery.masterblaster.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/jquery.masterblaster.css" media="screen" />
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script src="./javascripts/jquery.js"></script>
+    <script src="./javascripts/jquery.masterblaster.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <title>jQuery.masterblaster by aef-</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>jQuery.masterblaster</h1>
-        <p>Simple tag management.</p>
+    <div id="container">
+      <div class="inner">
 
-        <p class="view"><a href="https://github.com/aef-/jquery.masterblaster">View the Project on GitHub <small>aef-/jquery.masterblaster</small></a></p>
+        <header>
+          <h1>Jquery.masterblaster</h1>
+          <h2>A nice and tidy tag manager.</h2>
+        </header>
 
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/aef-/jquery.masterblaster/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/aef-/jquery.masterblaster/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/aef-/jquery.masterblaster" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
 
-        <ul>
-          <li><a href="https://github.com/aef-/jquery.masterblaster/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/aef-/jquery.masterblaster/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/aef-/jquery.masterblaster">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
         <hr>
 
-<h2>Document Center</h2>
+        <section id="main_content"> 
+          <h2>Requirements</h2>
 
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/aef-">aef-</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+<p>Tested with: <a href="http://jquery.com">jQuery 1.9.1</a></p>
+
+<h2>Examples</h2>
+
+<p><input class="masterblaster-1" /></p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">$mb</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.masterblaster-1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">masterblaster</span><span class="p">(</span> <span class="p">{</span> 
+  <span class="nx">tagRules</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">unique</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">minLength</span><span class="o">:</span> <span class="mi">3</span>
+  <span class="p">}</span>
+<span class="p">}</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 2&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;mb:add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">tagName</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span> <span class="s2">&quot;Added: tagName&quot;</span> <span class="p">);</span>
+<span class="p">}</span> <span class="p">);</span>  
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;mb:remove&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">tagName</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span> <span class="s2">&quot;Removed: tagName&quot;</span> <span class="p">);</span>
+<span class="p">}</span> <span class="p">);</span> 
+</code></pre></div>
+
+<script>
+var $mb = $( ".masterblaster-1" );
+$mb.masterblaster( { 
+  tagRules: {
+    unique: true,  
+    minLength: 3
+  }
+} );
+$mb.push( "tag 1" );
+$mb.push( "tag 2" );
+$mb.on( "mb:add", function( e, tagName ) {
+    console.info( "Added: tagName" );
+} );  
+$mb.on( "mb:remove", function( e, tagName ) {
+    console.info( "Removed: tagName" );
+} );  
+</script>
+
+<h2>Configuration</h2>
+
+<hr>
+
+<h4>animate</h4>
+
+<p>Animate the addition or removal of a tag.</p>
+
+<h6>Default</h6>
+
+<p>true</p>
+
+<hr>
+
+<h4>triggerKeys</h4>
+
+<p>Hotkeys user may use to enter a tag.</p>
+
+<h6>Default</h6>
+
+<p>[ 9, 13 ] //tab and enter</p>
+
+<hr>
+
+<h4>showAddButton</h4>
+
+<h5>Default</h5>
+
+<p>true</p>
+
+<hr>
+
+<h4>helpText</h4>
+
+<h6>Default</h6>
+
+<p>&quot;Hit Tab or Enter to add&quot;</p>
+
+<hr>
+
+<h4>tagRules</h4>
+
+<h5>unique</h5>
+
+<p>Tags must be unique to be added.</p>
+
+<h6>Default</h6>
+
+<p>false</p>
+
+<h5>minLength</h5>
+
+<p>Minimum character length a tag must be.</p>
+
+<h6>Default</h6>
+
+<p>null</p>
+
+<hr>
+
+<h2>Events</h2>
+
+<h4>mb:add</h4>
+
+<p>Occurs on addition of tag through any means (user insert or programmatically through the api).</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">$mb</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.masterblaster-1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">masterblaster</span><span class="p">(</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;mb:add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">tagName</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span> <span class="nx">tagName</span> <span class="p">);</span>
+<span class="p">}</span> <span class="p">);</span>
+</code></pre></div>
+
+<h4>mb:remove</h4>
+
+<p>Occurs on removal of tag through any means (user insert or programmatically through the api). If multiple tags of the same name are added and are removed using <em>remove</em> api the event will still be called only once.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">$mb</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.masterblaster-1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">masterblaster</span><span class="p">(</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span> <span class="s2">&quot;tag 1&quot;</span> <span class="p">);</span> <span class="c1">//or $mb.pop( );</span>
+<span class="nx">$mb</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;mb:remove&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">tagName</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span> <span class="nx">tagName</span> <span class="p">);</span>
+<span class="p">}</span> <span class="p">);</span>
+</code></pre></div>
+
+<h2>API</h2>
+
+<h4>push(tagName)</h4>
+
+<p>Add tagName to the end of the list.</p>
+
+<h4>pop( )</h4>
+
+<p>Removes last tag.</p>
+
+<h4>remove(tagName)</h4>
+
+<p>This will remove <em>all</em> tags tagName.</p>
+
+<h4>destroy()</h4>
+
+<p>Destroy/cleanup instance of plugin.</p>
+
+<h2>Tests</h2>
+
+<p>For tests, go <strong><a href="/jquery.masterblaster/tests">here</a></strong>.</p>
+
+        </section>
+
+        <footer>
+          Jquery.masterblaster is maintained by <a href="https://github.com/aef-">aef-</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
   </body>
-</html>
+</html> 
