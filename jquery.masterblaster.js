@@ -4,7 +4,7 @@
  */
 ( function( $, window, document, undefined ) {
   var pluginName = "masterblaster",
-      name = "plugin_masterblaster",
+      name = "masterblaster",
       defaults = { 
         animate: true,
         triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
