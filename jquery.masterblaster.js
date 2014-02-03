@@ -136,13 +136,12 @@
 
   MasterBlaster.prototype.push = function( tagName, silentPush ) {
     this.tags.push( tagName );
-    ;
 
     this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
 
     if (!silentPush) {
-      this.$element.trigger( "mb:add", tagName );
+      this.$element.trigger( "mb:add", tagName, this.tags );
     }
   };
 
@@ -163,7 +162,7 @@
     while( this.removeFromTagsArray( tagName ) );
 
     if (!silentRemove) {
-      this.$element.trigger( "mb:remove", tagName );
+      this.$element.trigger( "mb:remove", tagName, this.tags );
     }
   };
 
