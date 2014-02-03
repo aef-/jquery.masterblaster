@@ -134,14 +134,16 @@
     return ~( this.tags.indexOf( tagName ) ); 
   };
 
-  MasterBlaster.prototype.push = function( tagName ) {
+  MasterBlaster.prototype.push = function( tagName, silentPush ) {
     this.tags.push( tagName );
     ;
 
     this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
 
-    this.$element.trigger( "mb:add", tagName );
+    if (!silentPush) {
+      this.$element.trigger( "mb:add", tagName );
+    }
   };
 
   MasterBlaster.prototype.pop = function( ) {
@@ -156,10 +158,13 @@
     return true;
   };
 
-  MasterBlaster.prototype.remove = function( tagName ) {
+  MasterBlaster.prototype.remove = function( tagName, silentRemove ) {
     this.removeElem( tagName );
     while( this.removeFromTagsArray( tagName ) );
-    this.$element.trigger( "mb:remove", tagName );
+
+    if (!silentRemove) {
+      this.$element.trigger( "mb:remove", tagName );
+    }
   };
 
   MasterBlaster.prototype.destroy = function( ) {
