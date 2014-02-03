@@ -84,7 +84,7 @@
       }
       else {
         this.$container.addClass( "mb-error" );
-        this.$element.trigger( "mb:error", tagName, this.error );
+        this.$element.trigger( "mb:error", [tagName, this.error] );
       }
     }
   };                                                             
@@ -141,7 +141,7 @@
     this.refreshTagEvents( );
 
     if (!silentPush) {
-      this.$element.trigger( "mb:add", tagName, this.tags );
+      this.$element.trigger( "mb:add", [tagName, this.tags] );
     }
   };
 
@@ -162,7 +162,7 @@
     while( this.removeFromTagsArray( tagName ) );
 
     if (!silentRemove) {
-      this.$element.trigger( "mb:remove", tagName, this.tags );
+      this.$element.trigger( "mb:remove", [tagName, this.tags] );
     }
   };
 
