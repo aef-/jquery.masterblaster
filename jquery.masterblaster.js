@@ -185,6 +185,14 @@
     if( this.options.helpText )
       this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
 
+    // Add any tags the user wants to start with
+    var self = this; // Horrible I know
+    if ($.isArray(this.options.tags)) {
+      $.each(this.options.tags, function(i,e){
+        self.push(e, true);
+      });
+    }
+    
     this.addEvents( );
   };
   
