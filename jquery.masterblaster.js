@@ -4,7 +4,7 @@
  */
 ( function( $, window, document, undefined ) {
   var pluginName = "masterblaster",
-      name = "plugin_masterblaster",
+      name = "masterblaster",
       defaults = { 
         animate: true,
         triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
@@ -84,7 +84,7 @@
       }
       else {
         this.$container.addClass( "mb-error" );
-        this.$element.trigger( "mb:error", tagName, this.error );
+        this.$element.trigger( "mb:error", [tagName, this.error] );
       }
     }
   };                                                             
@@ -134,14 +134,15 @@
     return ~( this.tags.indexOf( tagName ) ); 
   };
 
-  MasterBlaster.prototype.push = function( tagName ) {
+  MasterBlaster.prototype.push = function( tagName, silentPush ) {
     this.tags.push( tagName );
-    ;
 
     this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
 
-    this.$element.trigger( "mb:add", tagName );
+    if (!silentPush) {
+      this.$element.trigger( "mb:add", [tagName, this.tags] );
+    }
   };
 
   MasterBlaster.prototype.pop = function( ) {
@@ -156,10 +157,13 @@
     return true;
   };
 
-  MasterBlaster.prototype.remove = function( tagName ) {
+  MasterBlaster.prototype.remove = function( tagName, silentRemove ) {
     this.removeElem( tagName );
     while( this.removeFromTagsArray( tagName ) );
-    this.$element.trigger( "mb:remove", tagName );
+
+    if (!silentRemove) {
+      this.$element.trigger( "mb:remove", [tagName, this.tags] );
+    }
   };
 
   MasterBlaster.prototype.destroy = function( ) {
@@ -180,6 +184,14 @@
     if( this.options.helpText )
       this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
 
+    // Add any tags the user wants to start with
+    var self = this; // Horrible I know
+    if ($.isArray(this.options.tags)) {
+      $.each(this.options.tags, function(i,e){
+        self.push(e, true);
+      });
+    }
+    
     this.addEvents( );
   };
   
