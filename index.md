@@ -104,7 +104,7 @@ Occurs on addition of tag through any means (user insert or programmatically thr
 {% highlight javascript %}
 var $mb = $( ".masterblaster-1" );
 $mb.masterblaster( );
-$mb.push( "tag 1" );
+$mb.masterblaster( "push", "tag 1" );
 $mb.on( "mb:add", function( e, tagName ) {
     console.info( tagName );
 } );
@@ -116,7 +116,7 @@ Occurs on removal of tag through any means (user insert or programmatically thro
 {% highlight javascript %}
 var $mb = $( ".masterblaster-1" );
 $mb.masterblaster( );
-$mb.push( "tag 1" );
+$mb.masterblaster( "push", "tag 1" );
 $mb.remove( "tag 1" ); //or $mb.pop( );
 $mb.on( "mb:remove", function( e, tagName ) {
     console.info( tagName );
@@ -133,7 +133,7 @@ $mb.masterblaster( {
     regexp: /^\d$/ //numbers only
   }
 } );
-$mb.push( "tag 1" );
+$mb.masterblaster( "push", "tag 1" );
 $mb.on( "mb:error", function( e, tagName, errorMsg ) {
   console.info( errorMsg ); //tag 1 is not in the valid format.
 } );
