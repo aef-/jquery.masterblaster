@@ -10,12 +10,13 @@
         triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
         showAddButton: true,
         helpText: "Hit Tab or Enter to add",
+        validateOnChange: false,
         tagRules: {
           unique: false,
           minLength: null,
           maxLength: null,
+          regexp: null
         },
-        matchRules: []
       },
       methods = [ "push", "pop", "remove", "destroy" ];
 
@@ -74,66 +75,44 @@
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
-  
+
   MasterBlaster.prototype.onAdd = function( e ) {
-    var clickedEnter = false, tagName = this.cleanTag( this.$input.val( ) );
+    var isBeingSaved = false, tagName = this.cleanTag( this.$input.val( ) );
     if( e.type === "click" || ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
-      e.preventDefault(); 
-      clickedEnter = true;
+      e.preventDefault( );
+      isBeingSaved = true;
     }
-    if( this.isValid( tagName, clickedEnter ) ) {
+    if( this.isValid( tagName, isBeingSaved ) ) {
       this.$container.removeClass( "mb-error" );
-      if (clickedEnter) {
+      if( isBeingSaved ) {
         this.push( tagName );
         this.$input.val( "" );
       }
-    } else {
+    } else if( isBeingSaved || this.options.validateOnChange ) {
       this.$container.addClass( "mb-error" );
       this.$element.trigger( "mb:error", tagName, this.error );
     }
-  };                                                             
- 
+  };
+
   MasterBlaster.prototype.cleanTag = function( tagName ) {
     return tagName;
   };
 
-  MasterBlaster.prototype.matchTags = function( regex, tags ) {
-    regex = new RegExp(regex);
-    if (typeof tags === 'string') {
-      tags = [tags];
-    } else if (!tags) {
-      tags = this.tags;
-    }
-    return $.grep(tags, function(v,i){
-      return !!v.match(regex);
-    });
-  };
-
-  MasterBlaster.prototype.isValid = function( tagName, enter ) {
-    if( enter && this.options.tagRules.unique && this.hasTag( tagName ) ) {
+  MasterBlaster.prototype.isValid = function( tagName, isBeingSaved ) {
+    if( this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
       return false;
-    } else if( enter && this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
+    } else if( this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
       this.error = tagName + " must be greater than " + this.options.tagRules.minLength + " characters.";
       return false;
-    } else if ( this.options.tagRules.maxLength && tagName.length > this.options.tagRules.maxLength ) {
+    } else if( this.options.tagRules.maxLength && tagName.length > this.options.tagRules.maxLength ) {
       this.error = tagName + " must have fewer than " + this.options.tagRules.maxLength + " characters.";
       return false;
-    } else {
-      var checkedRules = true;
-      if (tagName.length) {
-        $.each(this.options.matchRules, function(i,v){
-          if (!this.matchTags(v, tagName).length){
-            checkedRules = false;
-            return false;
-          }
-        }.bind(this));
-        if (!checkedRules) {
-          return false;
-        }
-      }
-      return true;
+    } else if( this.options.tagRules.regexp && !this.options.tagRules.regexp.test( tagName ) ) {
+      this.error = tagName + " is not in the valid format.";
+      return false;
     }
+    return true;
   };
 
   MasterBlaster.prototype.refreshTagEvents = function( ) {
@@ -204,15 +183,16 @@
     this.$input.attr( "id", "" ).addClass( "mb-input" );
     this.$container.append( this.$tagList.append( this.$meta ) );
     this.$meta.append( this.$input );
+
     if( this.options.showAddButton )
       this.$input.after( this.$addButton );
-    if( this.options.helpText ) {
-      this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
-    }
+
+    if( this.options.helpText )
+      this.$meta.append( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" );
 
     this.addEvents( );
   };
-  
+
   $.fn[ pluginName ] = function( optionsOrMethod ) {
     var $this,
         _arguments = Array.prototype.slice.call( arguments ),
