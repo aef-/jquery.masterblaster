@@ -14,7 +14,8 @@
           unique: false,
           minLength: null,
           maxLength: null,
-        }
+        },
+        matchRules: []
       },
       methods = [ "push", "pop", "remove", "destroy" ];
 
@@ -96,6 +97,19 @@
     return tagName;
   };
 
+  MasterBlaster.prototype.matchTags = function( regex, tags ) {
+    regex = new RegExp(regex);
+    if (typeof tags === 'string') {
+      tags = [tags];
+    } else if (!tags) {
+      tags = this.tags;
+    }
+    var grep = $.grep(tags, function(v,i){
+      return !!v.match(regex);
+    });
+    return grep;
+  };
+
   MasterBlaster.prototype.isValid = function( tagName, enter ) {
     if( enter && this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
@@ -107,6 +121,16 @@
       this.error = tagName + " must have fewer than " + this.options.tagRules.maxLength + " characters.";
       return false;
     } else {
+      var checkedRules = true;
+      $.each(this.options.matchRules, function(i,v){
+        if (!this.matchTags(v, tagName).length){
+          checkedRules = false;
+          return false;
+        }
+      }.bind(this));
+      if (!checkedRules) {
+        return false;
+      }
       return true;
     }
   };
