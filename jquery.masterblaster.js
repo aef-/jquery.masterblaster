@@ -144,7 +144,6 @@
 
   MasterBlaster.prototype.push = function( tagName ) {
     this.tags.push( tagName );
-    ;
 
     this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
