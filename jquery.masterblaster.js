@@ -104,10 +104,9 @@
     } else if (!tags) {
       tags = this.tags;
     }
-    var grep = $.grep(tags, function(v,i){
+    return $.grep(tags, function(v,i){
       return !!v.match(regex);
     });
-    return grep;
   };
 
   MasterBlaster.prototype.isValid = function( tagName, enter ) {
@@ -122,14 +121,16 @@
       return false;
     } else {
       var checkedRules = true;
-      $.each(this.options.matchRules, function(i,v){
-        if (!this.matchTags(v, tagName).length){
-          checkedRules = false;
+      if (tagName.length) {
+        $.each(this.options.matchRules, function(i,v){
+          if (!this.matchTags(v, tagName).length){
+            checkedRules = false;
+            return false;
+          }
+        }.bind(this));
+        if (!checkedRules) {
           return false;
         }
-      }.bind(this));
-      if (!checkedRules) {
-        return false;
       }
       return true;
     }
