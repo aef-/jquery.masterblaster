@@ -12,7 +12,8 @@
         helpText: "Hit Tab or Enter to add",
         tagRules: {
           unique: false,
-          minLength: null
+          minLength: null,
+          maxLength: null,
         }
       },
       methods = [ "push", "pop", "remove", "destroy" ];
@@ -74,18 +75,20 @@
   };
   
   MasterBlaster.prototype.onAdd = function( e ) {
+    var clickedEnter = false, tagName = this.cleanTag( this.$input.val( ) );
     if( e.type === "click" || ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
       e.preventDefault(); 
-      var tagName = this.cleanTag( this.$input.val( ) );
-      if( this.isValid( tagName ) ) {
-        this.$container.removeClass( "mb-error" );
+      clickedEnter = true;
+    }
+    if( this.isValid( tagName, clickedEnter ) ) {
+      this.$container.removeClass( "mb-error" );
+      if (clickedEnter) {
         this.push( tagName );
         this.$input.val( "" );
       }
-      else {
-        this.$container.addClass( "mb-error" );
-        this.$element.trigger( "mb:error", tagName, this.error );
-      }
+    } else {
+      this.$container.addClass( "mb-error" );
+      this.$element.trigger( "mb:error", tagName, this.error );
     }
   };                                                             
  
@@ -93,16 +96,17 @@
     return tagName;
   };
 
-  MasterBlaster.prototype.isValid = function( tagName ) {
-    if( this.options.tagRules.unique && this.hasTag( tagName ) ) {
+  MasterBlaster.prototype.isValid = function( tagName, enter ) {
+    if( enter && this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
       return false;
-    }
-    else if( this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
+    } else if( enter && this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
       this.error = tagName + " must be greater than " + this.options.tagRules.minLength + " characters.";
       return false;
-    }
-    else {
+    } else if ( this.options.tagRules.maxLength && tagName.length > this.options.tagRules.maxLength ) {
+      this.error = tagName + " must have fewer than " + this.options.tagRules.maxLength + " characters.";
+      return false;
+    } else {
       return true;
     }
   };
@@ -177,8 +181,9 @@
     this.$meta.append( this.$input );
     if( this.options.showAddButton )
       this.$input.after( this.$addButton );
-    if( this.options.helpText )
+    if( this.options.helpText ) {
       this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
+    }
 
     this.addEvents( );
   };
