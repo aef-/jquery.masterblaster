@@ -18,7 +18,8 @@
           regexp: null
         },
       },
-      methods = [ "push", "pop", "remove", "destroy" ];
+      methods = [ "push", "pop", "remove", "destroy" ],
+      methodsWithReturn = [ "getTags" ];
 
   function MasterBlaster( $element, options ) {
     this.options = $.extend( {}, defaults, options );
@@ -176,6 +177,10 @@
     this.$element.removeData( name );
   };
 
+  MasterBlaster.prototype.getTags = function( ) {
+    return $.merge( [ ], this.tags );
+  };
+
   MasterBlaster.prototype.setup = function( ) {
     this.$container.insertAfter( this.$oldInput );
     this.$oldInput.hide( );
@@ -195,18 +200,25 @@
   $.fn[ pluginName ] = function( optionsOrMethod ) {
     var $this,
         _arguments = Array.prototype.slice.call( arguments ),
-        optionsOrMethod = optionsOrMethod || { };
+        optionsOrMethod = optionsOrMethod || { },
+        results = [ ], returningData = false, selectors;
 
-    return this.each(function ( ) {
+    selectors = this.each(function ( ) {
       $this = $( this );
       if( !$this.data( name ) && ( typeof optionsOrMethod ).toLowerCase( ) === "object" ) 
         $this.data( name, new MasterBlaster( $this, optionsOrMethod ) );
       else if( ( typeof optionsOrMethod ).toLowerCase( ) === "string" ) {
         if( ~$.inArray( optionsOrMethod, methods ) )
           $this.data( name )[ optionsOrMethod ].apply( $this.data( name ), _arguments.slice( 1, _arguments.length ) );
+        else if( ~$.inArray( optionsOrMethod, methodsWithReturn ) ) {
+          returningData = true;
+          results.push( $this.data( name )[ optionsOrMethod ].apply( $this.data( name ), _arguments.slice( 1, _arguments.length ) ) );
+        }
         else
           throw new Error( "Method " + optionsOrMethod + " does not exist. Did you instantiate masterblaster?" );
       }
     } );
-  }; 
+
+    return returningData ? results : selectors;
+  };
 } )( jQuery, window, document );

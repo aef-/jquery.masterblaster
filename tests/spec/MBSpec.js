@@ -272,6 +272,17 @@ describe("FilthyPillow", function() {
       $mb1.masterblaster( "push", TAGS[ 0 ] );
       expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
     });
+    it("should be able to get all tags", function() {
+      $mb1.masterblaster( "push", TAGS[ 0 ] );
+      expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
+      $mb1.masterblaster( "push", TAGS[ 1 ] );
+      expect( $mb1 ).toHaveTag( TAGS[ 1 ] );
+
+      var tags = $mb1.masterblaster( "getTags" );
+      console.info( tags );
+      expect( tags ).toEqual( [ [ TAGS[ 0 ], TAGS[ 1 ] ] ] );
+
+    }); 
     it("should be able to pop tag", function() {
       $mb1.masterblaster( "push", TAGS[ 0 ] );
       expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
