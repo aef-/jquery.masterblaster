@@ -1,4 +1,4 @@
-/* jquery.masterblaster v.0.0.1
+/* jquery.masterblaster v.0.1.0
  * A nice and tidy tag manager.
  * by aef
  */
@@ -10,10 +10,13 @@
         triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
         showAddButton: true,
         helpText: "Hit Tab or Enter to add",
+        validateOnChange: false,
         tagRules: {
           unique: false,
-          minLength: null
-        }
+          minLength: null,
+          maxLength: null,
+          regexp: null
+        },
       },
       methods = [ "push", "pop", "remove", "destroy" ];
 
@@ -62,49 +65,54 @@
   };
 
   MasterBlaster.prototype.removeEvents = function( ) {
-    this.$input.on( "keydown", $.proxy( this.onRemove, this ) );
+    this.$input.on( "keyup", $.proxy( this.onRemove, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onRemove, this ) );
   };
 
   MasterBlaster.prototype.addEvents = function( ) {
-    this.$input.on( "keydown", $.proxy( this.onAdd, this ) );
+    this.$input.on( "keyup", $.proxy( this.onAdd, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
-  
+
   MasterBlaster.prototype.onAdd = function( e ) {
+    var isBeingSaved = false, tagName = this.cleanTag( this.$input.val( ) );
     if( e.type === "click" || ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
-      e.preventDefault(); 
-      var tagName = this.cleanTag( this.$input.val( ) );
-      if( this.isValid( tagName ) ) {
-        this.$container.removeClass( "mb-error" );
+      e.preventDefault( );
+      isBeingSaved = true;
+    }
+    if( this.isValid( tagName, isBeingSaved ) ) {
+      this.$container.removeClass( "mb-error" );
+      if( isBeingSaved ) {
         this.push( tagName );
         this.$input.val( "" );
       }
-      else {
-        this.$container.addClass( "mb-error" );
-        this.$element.trigger( "mb:error", tagName, this.error );
-      }
+    } else if( isBeingSaved || this.options.validateOnChange ) {
+      this.$container.addClass( "mb-error" );
+      this.$element.trigger( "mb:error", tagName, this.error );
     }
-  };                                                             
- 
+  };
+
   MasterBlaster.prototype.cleanTag = function( tagName ) {
     return tagName;
   };
 
-  MasterBlaster.prototype.isValid = function( tagName ) {
+  MasterBlaster.prototype.isValid = function( tagName, isBeingSaved ) {
     if( this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
       return false;
-    }
-    else if( this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
+    } else if( this.options.tagRules.minLength && tagName.length < this.options.tagRules.minLength ) {
       this.error = tagName + " must be greater than " + this.options.tagRules.minLength + " characters.";
       return false;
+    } else if( this.options.tagRules.maxLength && tagName.length > this.options.tagRules.maxLength ) {
+      this.error = tagName + " must have fewer than " + this.options.tagRules.maxLength + " characters.";
+      return false;
+    } else if( this.options.tagRules.regexp && !this.options.tagRules.regexp.test( tagName ) ) {
+      this.error = tagName + " is not in the valid format.";
+      return false;
     }
-    else {
-      return true;
-    }
+    return true;
   };
 
   MasterBlaster.prototype.refreshTagEvents = function( ) {
@@ -175,14 +183,16 @@
     this.$input.attr( "id", "" ).addClass( "mb-input" );
     this.$container.append( this.$tagList.append( this.$meta ) );
     this.$meta.append( this.$input );
+
     if( this.options.showAddButton )
       this.$input.after( this.$addButton );
+
     if( this.options.helpText )
-      this.$meta.append( $( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" ) );
+      this.$meta.append( "<span class='mb-help-text'><small>"+this.options.helpText+"</small></span>" );
 
     this.addEvents( );
   };
-  
+
   $.fn[ pluginName ] = function( optionsOrMethod ) {
     var $this,
         _arguments = Array.prototype.slice.call( arguments ),

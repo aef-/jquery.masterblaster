@@ -55,6 +55,12 @@ Animate the addition or removal of a tag.
 true
 
 -----
+####validateOnChange
+Trigger errors on input change if true -- otherwise trigger only on save.
+######Default
+false
+
+-----
 ####triggerKeys
 Hotkeys user may use to enter a tag.
 ######Default
@@ -80,6 +86,14 @@ false
 Minimum character length a tag must be.
 ######Default
 null
+#####maxLength
+Maximum character length a tag can be.
+######Default
+null
+#####regexp
+Pass a regular expression to test tags against
+######Default
+null 
 
 -----
 Events
@@ -109,6 +123,22 @@ $mb.on( "mb:remove", function( e, tagName ) {
 } );
 {% endhighlight %}
 
+####mb:error
+Occurs when one of the tagRules fail on save (or on input change when validateOnChange is set to true).
+
+{% highlight javascript %}
+var $mb = $( ".masterblaster-1" );
+$mb.masterblaster( {
+  tagRules: {
+    regexp: /^\d$/ //numbers only
+  }
+} );
+$mb.push( "tag 1" );
+$mb.on( "mb:error", function( e, tagName, errorMsg ) {
+  console.info( errorMsg ); //tag 1 is not in the valid format.
+} );
+{% endhighlight %}
+ 
 API
 -----------
 ####push(tagName)
