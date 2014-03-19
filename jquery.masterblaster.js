@@ -64,13 +64,13 @@
   };
 
   MasterBlaster.prototype.removeEvents = function( ) {
-    this.$input.on( "keydown", $.proxy( this.onRemove, this ) );
+    this.$input.on( "keyup", $.proxy( this.onRemove, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onRemove, this ) );
   };
 
   MasterBlaster.prototype.addEvents = function( ) {
-    this.$input.on( "keydown", $.proxy( this.onAdd, this ) );
+    this.$input.on( "keyup", $.proxy( this.onAdd, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
