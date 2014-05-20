@@ -8,6 +8,11 @@ describe("FilthyPillow", function() {
 
   var TAGS = [ "tag1", "tag2", "te", "reallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallyreallybigtag", "120321", "234234234234234234234234" ];
 
+  function keySim( $element, keyCode, shiftKey ) {
+    triggerKey( $element, "keydown", keyCode, shiftKey );
+    triggerKey( $element, "keypress", keyCode, shiftKey );
+    triggerKey( $element, "keyup", keyCode, shiftKey );
+  };
   function triggerKey( $element, type, keyCode, shiftKey ) {
     var e = $.Event( type );
     e.which = keyCode;
@@ -168,7 +173,7 @@ describe("FilthyPillow", function() {
     it("should trigger error on keyup", function() {
       var spyEvent = spyOnEvent($mb1.selector,'mb:error')
       var $input = $mb1.next( ).find( "input" );
-      triggerKey( $input, "keyup", keys.CHAR_A );
+      keySim( $input, keys.CHAR_A );
       expect( spyEvent ).toHaveBeenTriggered( );
     });
   } );
@@ -184,13 +189,13 @@ describe("FilthyPillow", function() {
       var $input = $mb3.next( ).find( "input" );
       $input.val( TAGS[ 0 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 1 ] );
-      triggerKey( $input, "keyup", keys.CHAR_A );
+      keySim( $input, keys.CHAR_A );
 
       $input.val( TAGS[ 3 ] );
-      triggerKey( $input, "keyup", keys.TAB );
+      keySim( $input, keys.TAB );
 
       expect( $mb3 ).toHaveTag( TAGS[ 0 ] );
       expect( $mb3 ).toHaveTag( TAGS[ 1 ] );
@@ -200,10 +205,10 @@ describe("FilthyPillow", function() {
       var $input = $mb1.next( ).find( "input" );
       $input.val( TAGS[ 0 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 0 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb1 ).toHaveOneTag( TAGS[ 0 ] );
     });
@@ -211,10 +216,10 @@ describe("FilthyPillow", function() {
       var $input = $mb2.next( ).find( "input" );
       $input.val( TAGS[ 0 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 0 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb2 ).toHaveMultipleTags( TAGS[ 0 ] );
     });
@@ -222,10 +227,10 @@ describe("FilthyPillow", function() {
       var $input = $mb1.next( ).find( "input" );
       $input.val( TAGS[ 2 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 2 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb1 ).not.toHaveTag( TAGS[ 2 ] );
     });
@@ -233,10 +238,10 @@ describe("FilthyPillow", function() {
       var $input = $mb2.next( ).find( "input" );
       $input.val( TAGS[ 2 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 3 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb2 ).toHaveTag( TAGS[ 2 ] );
       expect( $mb2 ).toHaveTag( TAGS[ 3 ] );
@@ -245,10 +250,10 @@ describe("FilthyPillow", function() {
       var $input = $mb5.next( ).find( "input" );
       $input.val( TAGS[ 4 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 5 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb5 ).toHaveTag( TAGS[ 4 ] );
       expect( $mb5 ).not.toHaveTag( TAGS[ 5 ] );
@@ -257,10 +262,10 @@ describe("FilthyPillow", function() {
       var $input = $mb5.next( ).find( "input" );
       $input.val( TAGS[ 1 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 4 ] );
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       expect( $mb5 ).not.toHaveTag( TAGS[ 1 ] );
       expect( $mb5 ).toHaveTag( TAGS[ 4 ] );
@@ -272,6 +277,17 @@ describe("FilthyPillow", function() {
       $mb1.masterblaster( "push", TAGS[ 0 ] );
       expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
     });
+    it("should be able to get all tags", function() {
+      $mb1.masterblaster( "push", TAGS[ 0 ] );
+      expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
+      $mb1.masterblaster( "push", TAGS[ 1 ] );
+      expect( $mb1 ).toHaveTag( TAGS[ 1 ] );
+
+      var tags = $mb1.masterblaster( "getTags" );
+      console.info( tags );
+      expect( tags ).toEqual( [ [ TAGS[ 0 ], TAGS[ 1 ] ] ] );
+
+    }); 
     it("should be able to pop tag", function() {
       $mb1.masterblaster( "push", TAGS[ 0 ] );
       expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
@@ -343,10 +359,10 @@ describe("FilthyPillow", function() {
       var $input = $mb1.next( ).find( "input" );
       $input.val( TAGS[ 0 ] );
 
-      triggerKey( $input, "keyup", keys.ENTER );
+      keySim( $input, keys.ENTER );
 
       $input.val( TAGS[ 3 ] );
-      triggerKey( $input, "keyup", keys.TAB );
+      keySim( $input, keys.TAB );
 
       expect( $mb1 ).toHaveTag( TAGS[ 0 ] );
       expect( $mb1 ).toHaveTag( TAGS[ 3 ] );

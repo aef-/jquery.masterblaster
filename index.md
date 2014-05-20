@@ -20,10 +20,10 @@ $mb.masterblaster( {
 $mb.masterblaster( "push", "tag 1" );
 $mb.masterblaster( "push", "tag 2" );
 $mb.on( "mb:add", function( e, tagName ) {
-    console.info( "Added: tagName" );
+    console.info( "Added: " + tagName );
 } );  
 $mb.on( "mb:remove", function( e, tagName ) {
-    console.info( "Removed: tagName" );
+    console.info( "Removed: " + tagName );
 } ); 
 {% endhighlight %}
 
@@ -38,10 +38,10 @@ $mb.masterblaster( {
 $mb.masterblaster( "push", "tag 1" );
 $mb.masterblaster( "push", "tag 2" );
 $mb.on( "mb:add", function( e, tagName ) {
-    console.info( "Added: tagName" );
+    console.info( "Added: " + tagName );
 } );  
 $mb.on( "mb:remove", function( e, tagName ) {
-    console.info( "Removed: tagName" );
+    console.info( "Removed: " + tagName );
 } );  
 </script>
 
@@ -85,7 +85,7 @@ false
 #####minLength
 Minimum character length a tag must be.
 ######Default
-null
+1
 #####maxLength
 Maximum character length a tag can be.
 ######Default

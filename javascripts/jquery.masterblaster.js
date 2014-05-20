@@ -1,4 +1,4 @@
-/* jquery.masterblaster v.0.1.0
+/* jquery.masterblaster v.0.1.1
  * A nice and tidy tag manager.
  * by aef
  */
@@ -13,12 +13,13 @@
         validateOnChange: false,
         tagRules: {
           unique: false,
-          minLength: null,
+          minLength: 1,
           maxLength: null,
           regexp: null
         },
       },
-      methods = [ "push", "pop", "remove", "destroy" ];
+      methods = [ "push", "pop", "remove", "destroy" ],
+      methodsWithReturn = [ "getTags" ];
 
   function MasterBlaster( $element, options ) {
     this.options = $.extend( {}, defaults, options );
@@ -65,13 +66,13 @@
   };
 
   MasterBlaster.prototype.removeEvents = function( ) {
-    this.$input.on( "keyup", $.proxy( this.onRemove, this ) );
+    this.$input.off( "keypress" );
     if( this.options.showAddButton )
-      this.$addButton.on( "click", $.proxy( this.onRemove, this ) );
+      this.$addButton.off( "click" );
   };
 
   MasterBlaster.prototype.addEvents = function( ) {
-    this.$input.on( "keyup", $.proxy( this.onAdd, this ) );
+    this.$input.on( "keypress", $.proxy( this.onAdd, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
@@ -144,7 +145,6 @@
 
   MasterBlaster.prototype.push = function( tagName ) {
     this.tags.push( tagName );
-    ;
 
     this.addElem( this.buildTag( tagName ) );
     this.refreshTagEvents( );
@@ -177,6 +177,10 @@
     this.$element.removeData( name );
   };
 
+  MasterBlaster.prototype.getTags = function( ) {
+    return $.merge( [ ], this.tags );
+  };
+
   MasterBlaster.prototype.setup = function( ) {
     this.$container.insertAfter( this.$oldInput );
     this.$oldInput.hide( );
@@ -196,18 +200,25 @@
   $.fn[ pluginName ] = function( optionsOrMethod ) {
     var $this,
         _arguments = Array.prototype.slice.call( arguments ),
-        optionsOrMethod = optionsOrMethod || { };
+        optionsOrMethod = optionsOrMethod || { },
+        results = [ ], returningData = false, selectors;
 
-    return this.each(function ( ) {
+    selectors = this.each(function ( ) {
       $this = $( this );
       if( !$this.data( name ) && ( typeof optionsOrMethod ).toLowerCase( ) === "object" ) 
         $this.data( name, new MasterBlaster( $this, optionsOrMethod ) );
       else if( ( typeof optionsOrMethod ).toLowerCase( ) === "string" ) {
         if( ~$.inArray( optionsOrMethod, methods ) )
           $this.data( name )[ optionsOrMethod ].apply( $this.data( name ), _arguments.slice( 1, _arguments.length ) );
+        else if( ~$.inArray( optionsOrMethod, methodsWithReturn ) ) {
+          returningData = true;
+          results.push( $this.data( name )[ optionsOrMethod ].apply( $this.data( name ), _arguments.slice( 1, _arguments.length ) ) );
+        }
         else
           throw new Error( "Method " + optionsOrMethod + " does not exist. Did you instantiate masterblaster?" );
       }
     } );
-  }; 
+
+    return returningData ? results : selectors;
+  };
 } )( jQuery, window, document );
