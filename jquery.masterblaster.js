@@ -13,7 +13,7 @@
         validateOnChange: false,
         tagRules: {
           unique: false,
-          minLength: null,
+          minLength: 1,
           maxLength: null,
           regexp: null
         },
