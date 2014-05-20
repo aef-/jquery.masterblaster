@@ -170,12 +170,17 @@ describe("FilthyPillow", function() {
       $mb1.next( ).find( ".mb-add-button" ).click( );
       expect( spyEvent ).toHaveBeenTriggered( );
     });
-    it("should trigger error on keyup", function() {
+    it("should trigger error on input change", function() {
       var spyEvent = spyOnEvent($mb1.selector,'mb:error')
       var $input = $mb1.next( ).find( "input" );
       keySim( $input, keys.CHAR_A );
       expect( spyEvent ).toHaveBeenTriggered( );
     });
+    it("should trigger error when using 'push' api method with invalid tag", function() {
+      var spyEvent = spyOnEvent($mb1.selector,'mb:error')
+      $mb1.masterblaster( "push", TAGS[ 2 ] );
+      expect( spyEvent ).toHaveBeenTriggered( );
+    }); 
   } );
 
   describe( "Configuration", function( ) {

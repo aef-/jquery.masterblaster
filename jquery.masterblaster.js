@@ -66,40 +66,55 @@
   };
 
   MasterBlaster.prototype.removeEvents = function( ) {
-    this.$input.off( "keypress" );
+    this.$input.off( "keydown" );
+    this.$input.off( "keyup" );
+
     if( this.options.showAddButton )
       this.$addButton.off( "click" );
   };
 
   MasterBlaster.prototype.addEvents = function( ) {
-    this.$input.on( "keypress", $.proxy( this.onAdd, this ) );
+    this.$input.on( "keydown", $.proxy( this.onKeyDown, this ) );
+    this.$input.on( "keyup", $.proxy( this.onAdd, this ) );
+
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
 
+  MasterBlaster.prototype.onKeyDown = function( e ) {
+    //Prevents <tab> from escaping when used as a trigger key
+    if( ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) )
+      e.preventDefault( );
+  };
+
   MasterBlaster.prototype.onAdd = function( e ) {
-    var isBeingSaved = false, tagName = this.cleanTag( this.$input.val( ) );
+    //Required so that options.validateOnChange can function without saving
+    var isBeingSaved = false, 
+        tagName = this.cleanTag( this.$input.val( ) );
+
     if( e.type === "click" || ~this.options.triggerKeys.indexOf( e.keyCode || e.which ) ) {
       e.preventDefault( );
       isBeingSaved = true;
     }
-    if( this.isValid( tagName, isBeingSaved ) ) {
-      this.$container.removeClass( "mb-error" );
-      if( isBeingSaved ) {
-        this.push( tagName );
-        this.$input.val( "" );
-      }
-    } else if( isBeingSaved || this.options.validateOnChange ) {
-      this.$container.addClass( "mb-error" );
-      this.$element.trigger( "mb:error", tagName, this.error );
+
+    if( isBeingSaved ) {
+      this.push( tagName );
+      this.$input.val( "" );
+    } else if( this.options.validateOnChange ) {
+      this.showError( tagName );
     }
+  };
+
+  MasterBlaster.prototype.showError = function( tagName ) {
+    this.$container.addClass( "mb-error" );
+    this.$element.trigger( "mb:error", tagName, this.error );
   };
 
   MasterBlaster.prototype.cleanTag = function( tagName ) {
     return tagName;
   };
 
-  MasterBlaster.prototype.isValid = function( tagName, isBeingSaved ) {
+  MasterBlaster.prototype.isValid = function( tagName ) {
     if( this.options.tagRules.unique && this.hasTag( tagName ) ) {
       this.error = tagName + " already exists.";
       return false;
@@ -144,12 +159,17 @@
   };
 
   MasterBlaster.prototype.push = function( tagName ) {
-    this.tags.push( tagName );
+    if( this.isValid( tagName ) ) {
+      this.$container.removeClass( "mb-error" );
+      this.tags.push( tagName );
 
-    this.addElem( this.buildTag( tagName ) );
-    this.refreshTagEvents( );
+      this.addElem( this.buildTag( tagName ) );
+      this.refreshTagEvents( );
 
-    this.$element.trigger( "mb:add", tagName );
+      this.$element.trigger( "mb:add", tagName );  
+    }
+    else
+      this.showError( tagName );
   };
 
   MasterBlaster.prototype.pop = function( ) {
