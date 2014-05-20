@@ -1,4 +1,4 @@
-/* jquery.masterblaster v.0.1.0
+/* jquery.masterblaster v.0.1.1
  * A nice and tidy tag manager.
  * by aef
  */
@@ -66,13 +66,13 @@
   };
 
   MasterBlaster.prototype.removeEvents = function( ) {
-    this.$input.on( "keyup", $.proxy( this.onRemove, this ) );
+    this.$input.off( "keypress" );
     if( this.options.showAddButton )
-      this.$addButton.on( "click", $.proxy( this.onRemove, this ) );
+      this.$addButton.off( "click" );
   };
 
   MasterBlaster.prototype.addEvents = function( ) {
-    this.$input.on( "keyup", $.proxy( this.onAdd, this ) );
+    this.$input.on( "keypress", $.proxy( this.onAdd, this ) );
     if( this.options.showAddButton )
       this.$addButton.on( "click", $.proxy( this.onAdd, this ) );
   };
