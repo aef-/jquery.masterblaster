@@ -10,6 +10,14 @@
       $( "#tags" ).masterblaster( {
         animate: true
       } );
+
+    $( "#tags" ).on( "mb:add", function( e, tagName ) {
+      console.info( "Added: ", tagName );
+    } );
+
+    $( "#tags" ).on( "mb:remove", function( e, tagName ) {
+      console.info( "Removed: ", tagName );
+    } );
     </script> 
   </body>
 </html>
