@@ -1,0 +1,13 @@
+{
+	"name": "jquery.masterblaster",
+	"repo": "aef-/jquery.masterblaster",
+  "description": "A nice and tidy tag manager.",
+  "version": "0.2.1",
+  "keywords": [ "tag", "tagmanager", "tagger", "tags", "form", "input", "tagging" ],
+	"dependencies": {
+		"component/jquery": ">=1.9.1"
+	},
+	"scripts": ["jquery.masterblaster.js"],
+	"styles": ["jquery.masterblaster.css"]
+}
+

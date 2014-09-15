@@ -1,4 +1,4 @@
-/* jquery.masterblaster v.0.2.0
+/* jquery.masterblaster v.0.2.1
  * A nice and tidy tag manager.
  * by aef
  */
@@ -7,6 +7,7 @@
       name = "plugin_masterblaster",
       defaults = { 
         animate: true,
+        tags: null,
         triggerKeys: [ 9, 13 ], //keycode when entered adds the tag
         showAddButton: true,
         helpText: "Hit Tab or Enter to add",
@@ -35,7 +36,11 @@
                   '<span class="mb-tag-text"></span>',
                   '<a class="mb-tag-remove"></a>',
                  '</div></li>' ].join( "" );
-    this.tags = [ ];
+
+    if( this.options.tags instanceof Array )
+      this.tags = this.options.tags.slice( 0 );
+    else
+      this.tags = [ ];
 
     this.setup( );
   }
@@ -198,7 +203,7 @@
   };
 
   MasterBlaster.prototype.getTags = function( ) {
-    return $.merge( [ ], this.tags );
+    return this.tags.slice( 0 );
   };
 
   MasterBlaster.prototype.setup = function( ) {

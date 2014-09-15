@@ -1,0 +1,29 @@
+{
+  "name": "jquery.masterblaster",
+  "version": "0.2.1",
+  "description": "A nice and tidy tag manager.",
+  "main": "./jquery.masterblaster.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aef-/jquery.masterblaster.git"
+  },
+  "author": "aef-",
+  "bugs": {
+    "url": "https://github.com/aef-/jquery.masterblaster/issues"
+  },
+	"files": [
+		"jquery.masterblaster.js",
+		"jquery.masterblaster.css",
+		"README.md"
+	],
+  "keywords": [ "tag", "tagmanager", "tagger", "tags", "form", "input", "tagging" ],
+  "homepage": "https://github.com/aef-/jquery.masterblaster",
+	"jam": {
+		"dependencies": {
+			"jquery": ">=1.9.1"
+		}
+	}
+}
