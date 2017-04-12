@@ -1,4 +1,4 @@
-#jquery.masterblaster
+# jquery.masterblaster [NOT MAINTAINED]
 
 A nice and tidy tag manager.
 
